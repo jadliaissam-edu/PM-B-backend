@@ -91,7 +91,7 @@ public class WorkspaceManager implements IWorkspaceService{
                 .map(workspaceMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
-//
+
 //    @Override
 //    public Page<WorkspaceDto> getAllWorkspaceSummaries(int page, int size) {
 //        Page<Workspace> workspaces = workspaceRepository.findAllByOrderByIdDesc(PageRequest.of(page, size));

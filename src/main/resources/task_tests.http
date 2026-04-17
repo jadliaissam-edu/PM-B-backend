@@ -1,0 +1,76 @@
+### Récupérer toutes les tâches
+GET http://localhost:8080/api/tasks
+Accept: application/json
+
+### Récupérer une tâche par ID
+GET http://localhost:8080/api/tasks/efef25c9-8325-472a-80b7-88f9dadb9171
+Accept: application/json
+
+### Récupérer les tâches par liste
+GET http://localhost:8080/api/tasks/liste/bb9e6754-7fca-493b-92e2-fdbafc1c6dea
+Accept: application/json
+
+### Récupérer les tâches par sprint
+GET http://localhost:8080/api/tasks/sprint/ef125cbe-26ff-4cde-ba85-b8c2f554769e
+Accept: application/json
+
+### Récupérer les tâches par assigné
+GET http://localhost:8080/api/tasks/assignee/0734ecb2-0978-4cd2-aba9-966ad00d8a5a
+Accept: application/json
+
+### Créer une tâche minimale (sans sprint ni assigné)
+POST http://localhost:8080/api/tasks
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJmaXJzdE5hbWUiOiJBZG1pbiIsImxhc3ROYW1lIjoiU3lzdGVtIiwicm9sZSI6IkFETUlOIiwidG9rZW5UeXBlIjoiYWNjZXNzIiwidXNlcklkIjoiMzM4NjQ3MjctYjdhNi00NmJhLWExMDAtNzY3NWNlNjc5NjE3Iiwic3ViIjoiYWRtaW5AZW5zYW0tY2FzYS5tYSIsImlhdCI6MTc3NTc1MDkyOCwiZXhwIjoxNzc1NzUxODI4fQ.ejojCIswrSm0u2LJxxpHSyymEMHz9LRGKsrndhEp2a8
+
+
+{
+  "title": "Créer la page de register",
+  "description": "Implémenter le formulaire de connexion avec validation",
+  "status": "TO_DO",
+  "priority": "HIGH",
+  "dueDate": "2025-06-01T18:00:00",
+  "listeId": "bb9e6754-7fca-493b-92e2-fdbafc1c6dea"
+}
+
+### Créer une tâche complète (avec sprint et assigné)
+POST http://localhost:8080/api/tasks
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJmaXJzdE5hbWUiOiJBZG1pbiIsImxhc3ROYW1lIjoiU3lzdGVtIiwicm9sZSI6IkFETUlOIiwidG9rZW5UeXBlIjoiYWNjZXNzIiwidXNlcklkIjoiMzM4NjQ3MjctYjdhNi00NmJhLWExMDAtNzY3NWNlNjc5NjE3Iiwic3ViIjoiYWRtaW5AZW5zYW0tY2FzYS5tYSIsImlhdCI6MTc3NTY5MjA1MywiZXhwIjoxNzc1NjkyOTUzfQ.4sNPB4YSWjCM6Sd3VAHQjEmonHJnOO2jXAVXUFdJBZg
+
+
+{
+  "title": "Implémenter l'API de paiement",
+  "description": "Intégrer Stripe pour les paiements en ligne",
+  "status": "TO_DO",
+  "priority": "MEDIUM",
+  "dueDate": "2025-06-15T18:00:00",
+  "listeId": "bb9e6754-7fca-493b-92e2-fdbafc1c6dea",
+  "sprintId": "ef125cbe-26ff-4cde-ba85-b8c2f554769e",
+  "assigneeId": "0734ecb2-0978-4cd2-aba9-966ad00d8a5a"
+}
+
+### Modifier une tâche
+PUT http://localhost:8080/api/tasks/efef25c9-8325-472a-80b7-88f9dadb9171
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJmaXJzdE5hbWUiOiJBZG1pbiIsImxhc3ROYW1lIjoiU3lzdGVtIiwicm9sZSI6IkFETUlOIiwidG9rZW5UeXBlIjoiYWNjZXNzIiwidXNlcklkIjoiMzM4NjQ3MjctYjdhNi00NmJhLWExMDAtNzY3NWNlNjc5NjE3Iiwic3ViIjoiYWRtaW5AZW5zYW0tY2FzYS5tYSIsImlhdCI6MTc3NTY5MjA1MywiZXhwIjoxNzc1NjkyOTUzfQ.4sNPB4YSWjCM6Sd3VAHQjEmonHJnOO2jXAVXUFdJBZg
+
+
+{
+  "title": "Créer la page de login",
+  "description": "Formulaire mis à jour avec OAuth2",
+  "status": "IN_REVIEW",
+  "priority": "HIGH",
+  "dueDate": "2025-06-10T18:00:00",
+  "listeId": "b3c4d5e6-03d5-4fa5-adf1-8fbbe981dafb"
+}
+
+### Assigner une tâche à un utilisateur
+PATCH http://localhost:8080/api/tasks/e7fd25ac-885b-4046-aa2e-4bf2c6461a73/assign/ca6ed6fa-922f-491b-8ed7-f06c2cea35c2
+
+### Déplacer une tâche vers un sprint
+PATCH http://localhost:8080/api/tasks/e7fd25ac-885b-4046-aa2e-4bf2c6461a73/sprint/ef125cbe-26ff-4cde-ba85-b8c2f554769e
+
+### Supprimer une tâche
+DELETE http://localhost:8080/api/tasks/efef25c9-8325-472a-80b7-88f9dadb9171
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJmaXJzdE5hbWUiOiJBZG1pbiIsImxhc3ROYW1lIjoiU3lzdGVtIiwicm9sZSI6IkFETUlOIiwidG9rZW5UeXBlIjoiYWNjZXNzIiwidXNlcklkIjoiMzM4NjQ3MjctYjdhNi00NmJhLWExMDAtNzY3NWNlNjc5NjE3Iiwic3ViIjoiYWRtaW5AZW5zYW0tY2FzYS5tYSIsImlhdCI6MTc3NTY5MjA1MywiZXhwIjoxNzc1NjkyOTUzfQ.4sNPB4YSWjCM6Sd3VAHQjEmonHJnOO2jXAVXUFdJBZg

@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +38,7 @@ public class ListeManager implements IListeService {
             Sprint sprint=sprintRepository.findById(request.getSprintId()).orElseThrow(() -> new IllegalArgumentException("Sprint not found"));
             liste.setSprint(sprint);
         }
+        liste.setCreatedAt(LocalDateTime.now());
         Liste savedliste=listeRepository.save(liste);
         return listeMapper.toDto(savedliste);
     }

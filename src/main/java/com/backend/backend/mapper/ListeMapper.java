@@ -1,6 +1,8 @@
 package com.backend.backend.mapper;
 
+import com.backend.backend.dao.entities.Folder;
 import com.backend.backend.dao.entities.Liste;
+import com.backend.backend.dao.repositories.FolderRepository;
 import com.backend.backend.dto.liste.ListeRequestDto;
 import com.backend.backend.dto.liste.ListeResponseDto;
 import com.backend.backend.dto.space.SpaceResponseDto;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Component;
 public class ListeMapper {
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private FolderRepository folderRepository;
 
     public ListeResponseDto toDto(Liste liste) {
         if (liste == null) return null;
@@ -26,11 +30,18 @@ public class ListeMapper {
         return dto;
     }
     public Liste toEntity(ListeRequestDto requestDto) {
-        if(requestDto == null) return null;
-        Liste liste = modelMapper.map(requestDto, Liste.class);
-        liste.setFolder(null);
+        if (requestDto == null) return null;
+
+        Liste liste = new Liste();
+        liste.setName(requestDto.getName());
+        liste.setType(requestDto.getType());
+        liste.setOrder(requestDto.getOrder());
+
+        Folder folder = folderRepository.findById(requestDto.getFolderId())
+                .orElseThrow(() -> new IllegalArgumentException("Folder not found"));
+
+        liste.setFolder(folder);
         liste.setSprint(null);
-        liste.setTasks(null);
         return liste;
     }
 

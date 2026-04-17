@@ -30,8 +30,6 @@ public class Space {
     private boolean isPrivate;
 
 
-    @OneToMany(mappedBy = "space")
-    private List<SpaceMember> spaceMembers;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "workspace_id", nullable = false)

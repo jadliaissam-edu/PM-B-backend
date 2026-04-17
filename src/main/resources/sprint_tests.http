@@ -1,0 +1,38 @@
+### Récupérer tous les sprints
+GET http://localhost:8080/api/sprints
+Accept: application/json
+
+### Récupérer tous les sprints avec pagination
+GET http://localhost:8080/api/sprints?page=0&size=10
+Accept: application/json
+
+### Récupérer sprint par ID
+GET http://localhost:8080/api/sprints/ea08280b-03d5-4fa5-adf1-8fbbe981dafb
+Accept: application/json
+
+### Ajouter un sprint
+POST http://localhost:8080/api/sprints
+Content-Type: application/json
+
+{
+  "name": "Sprint 3",
+  "startDate": "2025-05-01T09:00:00",
+  "endDate": "2025-05-15T18:00:00",
+  "goal": "Livrer les fonctionnalités de base",
+  "isActive": true
+}
+
+### Modifier un sprint
+PUT http://localhost:8080/api/sprints/6f2885b9-90e2-4fdc-b627-431b1274253a
+Content-Type: application/json
+
+{
+  "name": "Sprint 4",
+  "startDate": "2025-05-01T09:00:00",
+  "endDate": "2025-05-15T18:00:00",
+  "goal": "Livrer les fonctionnalités de base",
+  "isActive": false
+}
+
+### Supprimer un sprint
+DELETE http://localhost:8080/api/sprints/6f2885b9-90e2-4fdc-b627-431b1274253a

@@ -2,6 +2,7 @@ package com.backend.backend.web;
 
 import com.backend.backend.dto.auth.AuthResponseDto;
 import com.backend.backend.dto.auth.LoginRequestDto;
+import com.backend.backend.dto.auth.LogoutRequestDto;
 import com.backend.backend.dto.auth.MfaVerifyRequestDto;
 import com.backend.backend.dto.auth.RefreshTokenRequestDto;
 import com.backend.backend.dto.auth.RegisterRequestDto;
@@ -10,6 +11,7 @@ import com.backend.backend.service.serviceInterface.IAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import java.util.Map;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,5 +46,11 @@ public class AuthController {
     public ResponseEntity<TokenResponseDto> refresh(@RequestBody RefreshTokenRequestDto request) {
         TokenResponseDto response = authService.refresh(request);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Map<String, String>> logout(@RequestBody(required = false) LogoutRequestDto request) {
+        authService.logout(request);
+        return ResponseEntity.ok(Map.of("message", "Logout successful."));
     }
 }

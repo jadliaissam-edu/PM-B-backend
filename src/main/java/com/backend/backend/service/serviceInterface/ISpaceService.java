@@ -9,12 +9,12 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface ISpaceService {
-    public SpaceResponseDto addSpace(SpaceRequestDto spaceDto);
-    public SpaceResponseDto updateSpace(String id,SpaceRequestDto spaceDto);
-    public boolean deleteSpace(String id);
+    SpaceResponseDto addSpace(SpaceRequestDto spaceDto);
+    SpaceResponseDto updateSpace(String id,SpaceRequestDto spaceDto);
+    boolean deleteSpace(String id);
 
-    public SpaceResponseDto getSpaceByid(String spaceId);
+    SpaceResponseDto getSpaceByid(String spaceId);
     Page<SpaceResponseDto> getSpaces(Pageable pageable);
-    public List<SpaceResponseDto> getSpaceByWorkspace(String workspaceid);
+    List<SpaceResponseDto> getSpaceByWorkspace(String workspaceid);
 
 }

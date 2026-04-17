@@ -20,10 +20,10 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJmaXJzdE5hbWUiOiJBZG1pbiIsImxhc3ROYW1lIjoiU3lzdGVtIiwicm9sZSI6IkFETUlOIiwidG9rZW5UeXBlIjoiYWNjZXNzIiwidXNlcklkIjoiMzM4NjQ3MjctYjdhNi00NmJhLWExMDAtNzY3NWNlNjc5NjE3Iiwic3ViIjoiYWRtaW5AZW5zYW0tY2FzYS5tYSIsImlhdCI6MTc3NTY5MDQyNCwiZXhwIjoxNzc1NjkxMzI0fQ.XQ1OADIKpjlMxCXKlprBAeuiH3jNhkcv_pIS4jVQ_Gs
 
 {
-  "name": "Sprint Liste 1",
+  "name": "Sprint Liste 2",
   "type": "SPRINT",
-  "order": 1,
-  "folderId": "3e16cb2e-76a8-44a9-bdfe-b96f6256de96",
+  "order": 2,
+  "folderId": "2d7e34e7-419e-4f52-922c-2c4343b3815e",
   "sprintId": null
 }
 

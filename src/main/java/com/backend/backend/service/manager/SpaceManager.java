@@ -26,7 +26,6 @@ public class SpaceManager implements ISpaceService {
     private final SpaceRepository spaceRepository;
     private final SpaceMapper spaceMapper;
     private final WorkspaceRepository workspaceRepository;
-    private final UserRepository userRepository;
 
     @Override
     public SpaceResponseDto addSpace(SpaceRequestDto spaceDto) {
