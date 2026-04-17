@@ -25,6 +25,10 @@ public class FolderMapper {
     public FolderResponseDto toResponseDto(Folder folder){
 
         FolderResponseDto folderResponseDto = modelMapper.map(folder, FolderResponseDto.class);
+        folderResponseDto.setId(folder.getId());
+        if (folder.getSpace() != null) {
+            folderResponseDto.setSpaceId(folder.getSpace().getId());
+        }
 
         return folderResponseDto;
 

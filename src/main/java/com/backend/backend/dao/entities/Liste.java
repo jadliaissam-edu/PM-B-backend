@@ -1,6 +1,7 @@
 package com.backend.backend.dao.entities;
 
 import com.backend.backend.dao.enums.ListType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -55,6 +56,6 @@ public class Liste {
     @JoinColumn(name = "sprint_id")
     private Sprint sprint;
 
-    @OneToMany(mappedBy = "liste")
+    @OneToMany(mappedBy = "liste", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks;
 }

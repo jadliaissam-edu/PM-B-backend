@@ -2,15 +2,14 @@ package com.backend.backend.service.manager;
 
 
 import com.backend.backend.dao.entities.Folder;
-import com.backend.backend.dao.entities.Workspace;
 import com.backend.backend.dao.repositories.FolderRepository;
-import com.backend.backend.dao.repositories.SpaceRepository;
 import com.backend.backend.dto.folder.FolderRequestDto;
 import com.backend.backend.dto.folder.FolderResponseDto;
 import com.backend.backend.mapper.FolderMapper;
 import com.backend.backend.service.serviceInterface.IFolderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,7 +21,6 @@ public class FolderManager implements IFolderService {
 
     private final FolderMapper folderMapper;
     private final FolderRepository folderRepository;
-    private final SpaceRepository spaceRepository;
 
 
     @Override
@@ -57,7 +55,12 @@ public class FolderManager implements IFolderService {
     }
 
     @Override
-    public void deleteFolder(String folderId) { folderRepository.deleteById(folderId);}
+    @Transactional
+    public void deleteFolder(String folderId) {
+        Folder folder = folderRepository.findById(folderId)
+                .orElseThrow(() -> new RuntimeException("Folder introuvable"));
+        folderRepository.delete(folder);
+    }
 
     @Override
     public FolderResponseDto getFolderById(String id) {
@@ -72,6 +75,13 @@ public class FolderManager implements IFolderService {
     @Override
     public List<FolderResponseDto> getAllFolder() {
         return folderRepository.findAll().stream()
+                .map(folderMapper::toResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<FolderResponseDto> getFoldersBySpaceId(String spaceId) {
+        return folderRepository.findBySpace_Id(spaceId).stream()
                 .map(folderMapper::toResponseDto)
                 .collect(Collectors.toList());
     }

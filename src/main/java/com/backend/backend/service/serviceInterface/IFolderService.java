@@ -14,4 +14,5 @@ public interface IFolderService {
 
     public FolderResponseDto getFolderById(String id);
     public List<FolderResponseDto> getAllFolder();
+    public List<FolderResponseDto> getFoldersBySpaceId(String spaceId);
 }

@@ -35,6 +35,6 @@ public class Folder {
     @JoinColumn(name = "space_id", nullable = false)
     private Space space;
 
-    @OneToMany(mappedBy = "folder")
+    @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Liste> listes;
 }

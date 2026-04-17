@@ -60,13 +60,14 @@ public class SpaceManager implements ISpaceService {
     }
 
     @Override
+    @Transactional
     public boolean deleteSpace(String id) {
         if(id==null){
             return false;
         }
-        spaceRepository.findById(id)
+        Space space = spaceRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Space not found"));
-        spaceRepository.deleteById(id);
+        spaceRepository.delete(space);
         return true;
     }
 
