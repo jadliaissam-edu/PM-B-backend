@@ -1,9 +1,7 @@
 package com.backend.backend.web;
 
 
-import com.backend.backend.dao.entities.WorkspaceMember;
-import com.backend.backend.dao.enums.WorkspaceRole;
-import com.backend.backend.dto.workspace.WorkspaceResponseDto;
+import com.backend.backend.dto.workspaceMember.InviteMemberRequestDto;
 import com.backend.backend.dto.workspaceMember.RoleRequest;
 import com.backend.backend.dto.workspaceMember.WorkspaceMemberRequestDto;
 import com.backend.backend.dto.workspaceMember.WorkspaceMemberResponseDto;
@@ -45,6 +43,11 @@ public class WorkspaceMemberController {
 
         WorkspaceMemberResponseDto workspaceMemberResponseDto  = workspaceMemberService.addWorkspaceMember(workspaceMemberRequestDto);
         return workspaceMemberResponseDto;
+    }
+
+    @PostMapping("/invite")
+    public WorkspaceMemberResponseDto inviteMemberByEmail(@RequestBody InviteMemberRequestDto inviteMemberRequestDto){
+        return workspaceMemberService.inviteByEmail(inviteMemberRequestDto);
     }
 
     @PutMapping("/{id}")
