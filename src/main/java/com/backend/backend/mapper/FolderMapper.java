@@ -38,6 +38,7 @@ public class FolderMapper {
 
         Folder folder = new Folder();
         folder.setName(folderRequestDto.getName());
+        folder.setDescription(folderRequestDto.getDescription());
         folder.setHidden(folderRequestDto.isHidden());
         folder.setSpace(spaceRepository.getById(folderRequestDto.getSpaceId()));
         folder.setListes(null);

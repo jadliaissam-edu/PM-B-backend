@@ -7,6 +7,7 @@ import com.backend.backend.dao.enums.WorkspaceRole;
 import com.backend.backend.dao.repositories.UserRepository;
 import com.backend.backend.dao.repositories.WorkspaceMemberRepository;
 import com.backend.backend.dao.repositories.WorkspaceRepository;
+import com.backend.backend.dto.workspaceMember.InviteMemberRequestDto;
 import com.backend.backend.dto.workspaceMember.RoleRequest;
 import com.backend.backend.dto.workspaceMember.WorkspaceMemberRequestDto;
 import com.backend.backend.dto.workspaceMember.WorkspaceMemberResponseDto;
@@ -47,7 +48,9 @@ public class WorkspaceMemberManager implements IWorkspaceMemberService {
                     User user = userRepository.findById(member.getUser().getId())
                             .orElseThrow(() -> new RuntimeException("User introuvable"));
 
+                    dto.setUserId(user.getId());
                     dto.setUserName(user.getName());
+                    dto.setUserEmail(user.getEmail());
 
                     return dto;
                 })
@@ -65,7 +68,9 @@ public class WorkspaceMemberManager implements IWorkspaceMemberService {
         return workspaceMembers.stream()
                 .map(member -> {
                     WorkspaceMemberResponseDto dto = workspaceMemberMapper.toResponseDto(member);
+                    dto.setUserId(user.getId());
                     dto.setUserName(user.getName());
+                    dto.setUserEmail(user.getEmail());
                     return dto;
                 })
                 .toList();
@@ -91,9 +96,35 @@ public class WorkspaceMemberManager implements IWorkspaceMemberService {
 
         WorkspaceMemberResponseDto workspaceMemberResponseDto = workspaceMemberMapper.toResponseDto(createdworkspaceMember);
 
+        workspaceMemberResponseDto.setUserId(user.getId());
         workspaceMemberResponseDto.setUserName(user.getName());
+        workspaceMemberResponseDto.setUserEmail(user.getEmail());
 
         return workspaceMemberResponseDto;
+    }
+
+    @Override
+    public WorkspaceMemberResponseDto inviteByEmail(InviteMemberRequestDto dto) {
+        User user = userRepository.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new RuntimeException("No account found with email: " + dto.getEmail()));
+
+        Workspace workspace = workspaceRepository.findById(dto.getWorkspaceId())
+                .orElseThrow(() -> new RuntimeException("Workspace introuvable"));
+
+        WorkspaceMember member = new WorkspaceMember();
+        member.setUser(user);
+        member.setWorkspace(workspace);
+        member.setRole(dto.getRole() != null ? dto.getRole() : WorkspaceRole.MEMBER);
+        member.setJoinedAt(LocalDateTime.now());
+
+        WorkspaceMember saved = workspaceMemberRepository.save(member);
+
+        WorkspaceMemberResponseDto response = workspaceMemberMapper.toResponseDto(saved);
+        response.setUserId(user.getId());
+        response.setUserName(user.getName());
+        response.setUserEmail(user.getEmail());
+
+        return response;
     }
 
     @Override

@@ -8,6 +8,7 @@ import java.util.List;
 
 public class SpaceRequestDto {
     private String name;
+    private String description;
     private String color;
     private boolean isPrivate;
 
