@@ -24,6 +24,8 @@ public class Space {
     @Column(nullable = false)
     private String name;
 
+    private String description;
+
     private String color;
 
     @Column(nullable = false)

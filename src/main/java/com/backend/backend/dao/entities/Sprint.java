@@ -1,5 +1,6 @@
 package com.backend.backend.dao.entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -41,6 +42,6 @@ public class Sprint {
     @Column(nullable = false)
     private boolean isActive;
 
-    @OneToMany(mappedBy = "sprint")
+    @OneToMany(mappedBy = "sprint", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Liste> listes;
 }

@@ -30,7 +30,7 @@ public class SpaceMapper {
         Space space = new Space();
 
         space.setName(requestDto.getName());
-
+        space.setDescription(requestDto.getDescription());
         space.setColor(requestDto.getColor());
 
         space.setPrivate(requestDto.isPrivate());
