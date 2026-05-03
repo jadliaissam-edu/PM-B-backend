@@ -1,6 +1,7 @@
 package com.backend.backend.web;
 
 
+import com.backend.backend.dto.invitation.InvitationResponseDto;
 import com.backend.backend.dto.workspaceMember.InviteMemberRequestDto;
 import com.backend.backend.dto.workspaceMember.RoleRequest;
 import com.backend.backend.dto.workspaceMember.WorkspaceMemberRequestDto;
@@ -46,7 +47,7 @@ public class WorkspaceMemberController {
     }
 
     @PostMapping("/invite")
-    public WorkspaceMemberResponseDto inviteMemberByEmail(@RequestBody InviteMemberRequestDto inviteMemberRequestDto){
+    public InvitationResponseDto inviteMemberByEmail(@RequestBody InviteMemberRequestDto inviteMemberRequestDto){
         return workspaceMemberService.inviteByEmail(inviteMemberRequestDto);
     }
 
