@@ -53,7 +53,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/api/auth/**", "/error").permitAll()
+                        .requestMatchers("/api/auth/**", "/api/github/oauth/**", "/h2-console/**", "/error",
+                                "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/workspaces/**").permitAll()
                         .requestMatchers("/api/spaces/**").permitAll()
                         .requestMatchers("/api/listes/**").permitAll()
