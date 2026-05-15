@@ -53,7 +53,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/api/auth/**", "/api/github/oauth/**", "/h2-console/**", "/error",
+                        .requestMatchers("/api/auth/**", "/h2-console/**", "/error",
                                 "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/workspaces/**").permitAll()
                         .requestMatchers("/api/spaces/**").permitAll()
@@ -62,6 +62,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/workspaceMembers/**").permitAll()
                         .requestMatchers("/api/tasks/**").permitAll()
                         .requestMatchers("/api/sprints/**").permitAll()
+                        .requestMatchers("/api/repos/**").permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(ex -> ex.authenticationEntryPoint((request, response, authException) -> {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
