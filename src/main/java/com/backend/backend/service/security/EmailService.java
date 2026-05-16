@@ -45,4 +45,32 @@ public class EmailService implements IEmailService {
         // Envoi effectif via le serveur SMTP configure.
         mailSender.send(message);
     }
+
+    @Override
+    public void sendWorkspaceInvitationEmail(
+            String toEmail,
+            String workspaceName,
+            String inviterName,
+            String invitationUrl,
+            boolean hasAccount
+    ) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(fromEmail);
+        message.setTo(toEmail);
+        message.setSubject("Invitation workspace: " + workspaceName);
+
+        String actionText = hasAccount
+                ? "Vous etes deja inscrit. Ouvrez la page d'accueil invitation puis continuez avec votre session actuelle ou reconnectez-vous."
+                : "Creez votre compte pour accepter l'invitation, puis connectez-vous normalement.";
+
+        message.setText(
+                "Bonjour,\n\n" +
+                inviterName + " vous a invite a rejoindre le workspace: " + workspaceName + ".\n\n" +
+                actionText + "\n\n" +
+                "Lien invitation: " + invitationUrl + "\n\n" +
+                "Si vous n'etes pas concerne, ignorez cet email."
+        );
+
+        mailSender.send(message);
+    }
 }

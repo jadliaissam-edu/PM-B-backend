@@ -8,6 +8,8 @@ import lombok.Data;
 public class WorkspaceMemberResponseDto {
     private String id;
     private WorkspaceRole role;
+    private String userId;
     private String userName;
+    private String userEmail;
     private String workspaceId;
 }
