@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface TaskRepository extends JpaRepository<Task, String> {
     List<Task> findByListeId(String listeId);
     List<Task> findBySprintId(String sprintId);
-    List<Task> findByAssigneeId(String assigneeId);
+    List<Task> findByAssigneesId(String assigneeId);
 
     @EntityGraph(attributePaths = "tags")
     Optional<Task> findWithTagsById(String id);

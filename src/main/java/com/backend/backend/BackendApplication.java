@@ -288,7 +288,7 @@ public class BackendApplication {
 			task.setPriority(priority);
 			task.setDueDate(dueDate);
 			task.setSprint(sprint);
-			task.setAssignee(assignee);
+			task.setAssignees(java.util.List.of(assignee));
 			task.setUpdatedAt(LocalDateTime.now());
 			if (task.getCreatedAt() == null) {
 				task.setCreatedAt(LocalDateTime.now());
@@ -306,7 +306,7 @@ public class BackendApplication {
 		task.setUpdatedAt(LocalDateTime.now());
 		task.setListe(liste);
 		task.setSprint(sprint);
-		task.setAssignee(assignee);
+		task.setAssignees(java.util.List.of(assignee));
 		task.setTags(new ArrayList<>());
 		System.out.println("Seed: Task cree -> " + title);
 		return repo.save(task);

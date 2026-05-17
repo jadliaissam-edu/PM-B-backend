@@ -1,12 +1,6 @@
 package com.backend.backend.dao.entities;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 // import org.hibernate.annotations.UuidGenerator;
@@ -71,7 +65,7 @@ public class User {
     private List<WorkspaceMember> workspaceMembers;
 
 
-    @OneToMany(mappedBy = "assignee")
+    @ManyToMany(mappedBy = "assignees")
     private List<Task> assignedTasks;
 
     @OneToMany(mappedBy = "author")

@@ -40,9 +40,16 @@ public class TaskManager implements ITaskService {
             task.setSprint(sprint);
         }
 
-        if(requestDto.getAssigneeId()!=null){
-            User assignee=userRepository.findById(requestDto.getAssigneeId()).orElseThrow(() -> new RuntimeException("assignee not found"));
-            task.setAssignee(assignee);
+        java.util.List<String> userIds = new java.util.ArrayList<>();
+        if (requestDto.getAssigneeIds() != null) {
+            userIds.addAll(requestDto.getAssigneeIds());
+        }
+        if (requestDto.getAssigneeId() != null && !userIds.contains(requestDto.getAssigneeId())) {
+            userIds.add(requestDto.getAssigneeId());
+        }
+        if (!userIds.isEmpty()) {
+            java.util.List<User> assignees = userRepository.findAllById(userIds);
+            task.setAssignees(assignees);
         }
 
         task.setCreatedAt(LocalDateTime.now());
@@ -74,7 +81,7 @@ public class TaskManager implements ITaskService {
 
     @Override
     public List<TaskResponseDto> getTasksByAssignee(String assigneeId) {
-        return taskRepository.findByAssigneeId(assigneeId).stream().map(taskMapper::toDto).toList();
+        return taskRepository.findByAssigneesId(assigneeId).stream().map(taskMapper::toDto).toList();
     }
 
     @Override
@@ -89,9 +96,22 @@ public class TaskManager implements ITaskService {
         task.setDueDate(requestDto.getDueDate());
         task.setUpdatedAt(LocalDateTime.now());
 
-        if(requestDto.getAssigneeId()!=null){
-            User assignee=userRepository.findById(requestDto.getAssigneeId()).orElseThrow(() -> new RuntimeException("assignee not found"));
-            task.setAssignee(assignee);
+        java.util.List<String> userIds = new java.util.ArrayList<>();
+        if (requestDto.getAssigneeIds() != null) {
+            userIds.addAll(requestDto.getAssigneeIds());
+        }
+        if (requestDto.getAssigneeId() != null && !userIds.contains(requestDto.getAssigneeId())) {
+            userIds.add(requestDto.getAssigneeId());
+        }
+        if (!userIds.isEmpty()) {
+            java.util.List<User> assignees = userRepository.findAllById(userIds);
+            task.setAssignees(assignees);
+        } else {
+            if (task.getAssignees() != null) {
+                task.getAssignees().clear();
+            } else {
+                task.setAssignees(new java.util.ArrayList<>());
+            }
         }
 
         if(requestDto.getSprintId()!=null){
@@ -116,7 +136,9 @@ public class TaskManager implements ITaskService {
     public TaskResponseDto assignTask(String taskId, String assigneeId) {
         Task task=taskRepository.findById(taskId).orElseThrow(() -> new RuntimeException("task not found"));
         User assignee=userRepository.findById(assigneeId).orElseThrow(() -> new RuntimeException("user not found"));
-        task.setAssignee(assignee);
+        java.util.List<User> assignees = new java.util.ArrayList<>();
+        assignees.add(assignee);
+        task.setAssignees(assignees);
         task.setUpdatedAt(LocalDateTime.now());
         return taskMapper.toDto(taskRepository.save(task));
     }

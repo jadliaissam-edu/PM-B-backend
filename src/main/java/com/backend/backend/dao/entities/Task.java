@@ -67,9 +67,13 @@ public class  Task {
     @JoinColumn(name = "sprint_id")
     private Sprint sprint;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "assignee_id")
-    private User assignee;
+    @ManyToMany
+    @JoinTable(
+            name = "task_assignee",
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> assignees;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Subtask> subtasks;

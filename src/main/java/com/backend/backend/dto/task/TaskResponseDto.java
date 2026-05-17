@@ -27,6 +27,8 @@ public class TaskResponseDto {
 
     private String assigneeId;
     private String assigneeName;
+    private List<String> assigneeIds;
+    private List<String> assigneeNames;
 
 
 //    private List<String> tagIds;
