@@ -50,6 +50,14 @@ public class WorkspaceMemberManager implements IWorkspaceMemberService {
         @Value("${app.frontend.base-url:http://localhost:5173}")
         private String frontendBaseUrl;
 
+        private String normalizedFrontendBaseUrl() {
+                String value = frontendBaseUrl != null ? frontendBaseUrl.trim() : "";
+                if (value.isEmpty()) {
+                        return "http://localhost:5173";
+                }
+                return value.endsWith("/") ? value.substring(0, value.length() - 1) : value;
+        }
+
 
     @Override
     public List<WorkspaceMemberResponseDto> getWorkspaceMembersByWorkspacId(String workspaceId) {
@@ -166,7 +174,7 @@ public class WorkspaceMemberManager implements IWorkspaceMemberService {
                 WorkspaceInvitation saved = workspaceInvitationRepository.save(invitation);
 
                 boolean hasAccount = existingUser.isPresent();
-                String inviteUrl = frontendBaseUrl
+                String inviteUrl = normalizedFrontendBaseUrl()
                         + "/invite?email=" + URLEncoder.encode(inviteeEmail, StandardCharsets.UTF_8)
                         + "&workspaceId=" + URLEncoder.encode(workspace.getId(), StandardCharsets.UTF_8)
                         + "&hasAccount=" + hasAccount;
