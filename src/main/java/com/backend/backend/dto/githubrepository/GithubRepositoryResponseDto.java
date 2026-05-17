@@ -3,6 +3,7 @@ package com.backend.backend.dto.githubrepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
 
@@ -20,6 +21,7 @@ public class GithubRepositoryResponseDto {
     private String repoOwner;
     private String repoName;
     private String branch;
+    @JsonProperty("isPrivate")
     private boolean isPrivate;
     /** True si un token chiffré est présent en base (sans l'exposer). */
     private boolean tokenStored;
