@@ -3,6 +3,7 @@ package com.backend.backend.dto.githubrepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Corps de la requête d'ajout / mise à jour d'un dépôt GitHub.
@@ -27,6 +28,7 @@ public class GithubRepositoryRequestDto {
     private String branch;
 
     /** True si le dépôt est privé. */
+    @JsonProperty("isPrivate")
     private boolean isPrivate;
 
     /**
