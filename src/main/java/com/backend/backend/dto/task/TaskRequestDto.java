@@ -20,6 +20,7 @@ public class TaskRequestDto {
     private String sprintId;
 
     private String assigneeId;
+    private List<String> assigneeIds;
 
 
     // private List<String> tagIds;

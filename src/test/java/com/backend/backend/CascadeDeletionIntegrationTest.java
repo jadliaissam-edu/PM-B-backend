@@ -217,7 +217,7 @@ class CascadeDeletionIntegrationTest {
         task.setCreatedAt(LocalDateTime.now());
         task.setUpdatedAt(LocalDateTime.now());
         task.setListe(liste);
-        task.setAssignee(assignee);
+        task.setAssignees(java.util.List.of(assignee));
         task.setTags(new ArrayList<>());
         return taskRepository.save(task);
     }

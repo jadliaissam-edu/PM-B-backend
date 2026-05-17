@@ -28,9 +28,11 @@ public class TaskMapper {
             dto.setSprintName(task.getSprint().getName());
         }
 
-        if (task.getAssignee() != null) {
-            dto.setAssigneeId(task.getAssignee().getId());
-            dto.setAssigneeName(task.getAssignee().getName());
+        if (task.getAssignees() != null && !task.getAssignees().isEmpty()) {
+            dto.setAssigneeIds(task.getAssignees().stream().map(com.backend.backend.dao.entities.User::getId).toList());
+            dto.setAssigneeNames(task.getAssignees().stream().map(com.backend.backend.dao.entities.User::getName).toList());
+            dto.setAssigneeId(task.getAssignees().get(0).getId());
+            dto.setAssigneeName(task.getAssignees().get(0).getName());
         }
 
         return dto;
