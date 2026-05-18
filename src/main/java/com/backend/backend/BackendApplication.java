@@ -518,20 +518,22 @@ public class BackendApplication {
 	                         List<Sprint> sprints,
 	                         SpaceBlueprint plan,
 	                         int index) {
-		Sprint sprintA = sprints.get(0);
-		Sprint sprintB = sprints.get(1);
+		Sprint sprint1 = sprints.get(0);
+		Sprint sprint2 = sprints.get(1);
 
-		Folder cadrage = createFolderIfMissing(ctx.folderRepository(), space, "Cadrage et priorisation", false);
-		Folder execution = createFolderIfMissing(ctx.folderRepository(), space, "Execution operationnelle", false);
+		Folder backlogFolder = createFolderIfMissing(ctx.folderRepository(), space, "Backlog", false);
+		Folder sprint1Folder = createFolderIfMissing(ctx.folderRepository(), space, "Sprint 1", false);
+		Folder sprint2Folder = createFolderIfMissing(ctx.folderRepository(), space, "Sprint 2", false);
 
-		Liste backlog = createListeIfMissing(ctx.listeRepository(), cadrage, "Backlog priorise", ListType.PHASE, 1, null);
-		Liste prepSprint = createListeIfMissing(ctx.listeRepository(), cadrage,
-				"Preparation " + sprintA.getName(), ListType.SPRINT, 2, sprintA);
-		Liste inProgress = createListeIfMissing(ctx.listeRepository(), execution,
-				"Execution " + sprintA.getName(), ListType.SPRINT, 1, sprintA);
-		Liste recette = createListeIfMissing(ctx.listeRepository(), execution, "Recette et UAT", ListType.PHASE, 2, null);
-		Liste nextSprint = createListeIfMissing(ctx.listeRepository(), execution,
-				"Plan sprint suivant", ListType.SPRINT, 3, sprintB);
+		createListeIfMissing(ctx.listeRepository(), backlogFolder, "Backlog", ListType.PHASE, 1, null);
+		Liste sprint1Plan = createListeIfMissing(ctx.listeRepository(), sprint1Folder,
+				"Planning - " + sprint1.getName(), ListType.SPRINT, 1, sprint1);
+		Liste sprint1Exec = createListeIfMissing(ctx.listeRepository(), sprint1Folder,
+				"Execution - " + sprint1.getName(), ListType.SPRINT, 2, sprint1);
+		Liste sprint2Plan = createListeIfMissing(ctx.listeRepository(), sprint2Folder,
+				"Planning - " + sprint2.getName(), ListType.SPRINT, 1, sprint2);
+		Liste sprint2Exec = createListeIfMissing(ctx.listeRepository(), sprint2Folder,
+				"Execution - " + sprint2.getName(), ListType.SPRINT, 2, sprint2);
 
 		List<User> assigneePool = new ArrayList<>();
 		assigneePool.add(owner);
@@ -544,68 +546,61 @@ public class BackendApplication {
 		String i4 = pickInitiative(plan.initiatives(), 4);
 		String i5 = pickInitiative(plan.initiatives(), 5);
 
-		seedTaskScenario(ctx, workspace, space, backlog, null, owner, pickUser(assigneePool, index),
-				"Qualifier les besoins - " + i0,
-				"Atelier de cadrage metier, estimation initiale et criteres d'acceptation pour " + i0 + ".",
+		String spaceTag = slugify(space.getName());
+
+		seedTaskScenario(ctx, workspace, space, sprint1Plan, sprint1, owner, pickUser(assigneePool, index),
+				"Cadrer " + i0,
+				"Aligner le scope et les dependances pour " + i0 + ".",
 				TaskStatus.TO_DO,
-				Priority.HIGH,
-				7,
-				List.of("analyse", "priorisation", workspace.getSlug()),
-				List.of("Consolider le contexte", "Definir la valeur metier"));
-
-		seedTaskScenario(ctx, workspace, space, backlog, null, owner, pickUser(assigneePool, index + 1),
-				"Structurer le backlog - " + i1,
-				"Regrouper les demandes, clarifier les dependances et preparer la priorisation trimestrielle.",
-				TaskStatus.IN_DEV,
-				Priority.MEDIUM,
-				10,
-				List.of("backlog", "gouvernance", workspace.getSlug()),
-				List.of("Ranger par impact", "Taguer les risques"));
-
-		seedTaskScenario(ctx, workspace, space, prepSprint, sprintA, owner, pickUser(assigneePool, index + 2),
-				"Preparer le sprint actif - " + i2,
-				"Finaliser les pre-requis techniques et verrouiller le scope de sprint pour " + space.getName() + ".",
-				TaskStatus.IN_TEST,
 				Priority.HIGH,
 				5,
-				List.of("sprint-planning", "coordination", "delivery"),
-				List.of("Valider les prerequis", "Partager le plan de charge"));
+				List.of(spaceTag, "sprint-1", workspace.getSlug()),
+				List.of("Definir le scope", "Estimer la charge"));
 
-		seedTaskScenario(ctx, workspace, space, inProgress, sprintA, owner, pickUser(assigneePool, index + 3),
-				"Implementer le flux principal - " + i3,
-				"Realiser l'implementation principale, brancher les controles qualite et documenter les decisions.",
+		seedTaskScenario(ctx, workspace, space, sprint1Exec, sprint1, owner, pickUser(assigneePool, index + 1),
+				"Implementer " + i1,
+				"Developper la feature " + i1 + " et brancher les points d'integration.",
 				TaskStatus.IN_DEV,
-				Priority.URGENT,
-				4,
-				List.of("implementation", "sprint", "critical"),
-				List.of("Coder le flux principal", "Ajouter les validations"));
-
-		seedTaskScenario(ctx, workspace, space, inProgress, sprintA, owner, pickUser(assigneePool, index + 4),
-				"Synchroniser les integrations - " + i4,
-				"Verifier les APIs, stabiliser les interfaces et monitorer les incidents d'integration.",
-				TaskStatus.IN_REVIEW,
 				Priority.HIGH,
-				6,
-				List.of("integration", "api", workspace.getSlug()),
-				List.of("Verifier les contrats API", "Tracer les ecarts"));
+				8,
+				List.of(spaceTag, "sprint-1", "implementation"),
+				List.of("Coder la fonctionnalite", "Ajouter les tests unitaires"));
 
-		seedTaskScenario(ctx, workspace, space, recette, null, owner, pickUser(assigneePool, index + 1),
-				"Mener la recette utilisateur - " + i5,
-				"Executer les scenarios de recette, consolider les retours et preparer la livraison.",
-				TaskStatus.DONE,
+		seedTaskScenario(ctx, workspace, space, sprint1Exec, sprint1, owner, pickUser(assigneePool, index + 2),
+				"Tester " + i2,
+				"Valider " + i2 + " avec les scenarios critiques et corriger les regressions.",
+				TaskStatus.IN_TEST,
 				Priority.MEDIUM,
-				3,
-				List.of("recette", "validation", "uat"),
-				List.of("Executer le plan de tests", "Publier le bilan de recette"));
+				10,
+				List.of(spaceTag, "sprint-1", "qa"),
+				List.of("Executer les tests", "Fixer les regressions"));
 
-		seedTaskScenario(ctx, workspace, space, nextSprint, sprintB, owner, pickUser(assigneePool, index + 2),
-				"Planifier la prochaine iteration - " + i0,
-				"Construire le prochain lot de valeur et preparer les points de securisation.",
+		seedTaskScenario(ctx, workspace, space, sprint2Plan, sprint2, owner, pickUser(assigneePool, index + 1),
+				"Finaliser " + i3,
+				"Clore les points ouverts et preparer la mise en prod pour " + i3 + ".",
 				TaskStatus.TO_DO,
-				Priority.LOW,
+				Priority.MEDIUM,
+				12,
+				List.of(spaceTag, "sprint-2", workspace.getSlug()),
+				List.of("Revoir les criteres", "Valider les prerequis"));
+
+		seedTaskScenario(ctx, workspace, space, sprint2Exec, sprint2, owner, pickUser(assigneePool, index + 2),
+				"Integrer " + i4,
+				"Connecter " + i4 + " aux autres modules et fiabiliser les flux.",
+				TaskStatus.IN_DEV,
+				Priority.HIGH,
 				14,
-				List.of("roadmap", "next-sprint", "projection"),
-				List.of("Proposer le perimetre", "Valider la capacite equipe"));
+				List.of(spaceTag, "sprint-2", "integration"),
+				List.of("Relier les API", "Verifier les flux"));
+
+		seedTaskScenario(ctx, workspace, space, sprint2Exec, sprint2, owner, pickUser(assigneePool, index + 3),
+				"Stabiliser " + i5,
+				"Monitorer et optimiser la stabilite de " + i5 + " avant la release.",
+				TaskStatus.IN_REVIEW,
+				Priority.MEDIUM,
+				16,
+				List.of(spaceTag, "sprint-2", "stabilisation"),
+				List.of("Observer les metrics", "Optimiser les performances"));
 	}
 
 	private void seedTaskScenario(SeedContext ctx,
@@ -751,201 +746,195 @@ public class BackendApplication {
 	private List<WorkspaceBlueprint> buildWorkspaceBlueprints() {
 		return List.of(
 				new WorkspaceBlueprint(
-						"Campus Numerique ENSAM",
-						"campus-numerique-ensam",
+						"PM-B Core Platform",
+						"pm-b-core",
 						List.of(
 								new SpaceBlueprint(
-										"Admission et Inscriptions",
-										"#1F7A8C",
-										false,
-										List.of(
-												"formulaire de preinscription",
-												"verification des dossiers",
-												"relance des candidats",
-												"calendrier des entretiens",
-												"paiement des frais",
-												"confirmation d'admission"
-										)
-								),
-								new SpaceBlueprint(
-										"Scolarite et Examens",
-										"#2A9D8F",
-										false,
-										List.of(
-												"gestion des absences",
-												"planification des controles",
-												"publication des notes",
-												"traitement des recours",
-												"edition des releves",
-												"comite pedagogique"
-										)
-								),
-								new SpaceBlueprint(
-										"Vie Etudiante",
-										"#E76F51",
-										false,
-										List.of(
-												"gestion des clubs",
-												"organisation des evenements",
-												"partenariats associatifs",
-												"accompagnement social",
-												"logistique campus",
-												"communication interne"
-										)
-								),
-								new SpaceBlueprint(
-										"Communication Digitale",
-										"#264653",
-										true,
-										List.of(
-												"planning editorial",
-												"newsletter hebdomadaire",
-												"campagnes reseaux sociaux",
-												"charte visuelle",
-												"suivi des interactions",
-												"rapport de visibilite"
-										)
-								)
-						),
-						List.of(
-								new SprintBlueprint("Sprint coordination pedagogique", -14, 14,
-										"Stabiliser les flux et clarifier les responsabilites", true),
-								new SprintBlueprint("Sprint execution des services", 1, 14,
-										"Accelerer les delais de traitement et la qualite", false),
-								new SprintBlueprint("Sprint amelioration continue", 16, 14,
-										"Industrialiser les bonnes pratiques", false)
-						)
-				),
-				new WorkspaceBlueprint(
-						"Produit SaaS PM-B",
-						"produit-saas-pm-b",
-						List.of(
-								new SpaceBlueprint(
-										"Discovery Produit",
-										"#15616D",
-										false,
-										List.of(
-												"interviews utilisateurs",
-												"analyse de la retention",
-												"priorisation des epics",
-												"roadmap trimestrielle",
-												"experimentation MVP",
-												"definition des KPI"
-										)
-								),
-								new SpaceBlueprint(
-										"Build Frontend",
+										"Frontend",
 										"#3A86FF",
 										false,
 										List.of(
-												"refonte du dashboard",
-												"optimisation des performances",
-												"gestion des erreurs UX",
-												"accessibilite WCAG",
+												"refonte dashboard",
 												"navigation contextuelle",
-												"tests E2E"
+												"tableau kanban",
+												"gestion des notifications",
+												"page profil",
+												"accessibilite"
 										)
 								),
 								new SpaceBlueprint(
-										"Build Backend",
+										"Backend",
 										"#4D908E",
 										false,
 										List.of(
-												"hardening des API",
-												"gestion des permissions",
-												"monitoring des jobs",
-												"optimisation SQL",
-												"cache applicatif",
-												"resilience MFA"
+												"auth multi-tenant",
+												"gestion des roles",
+												"export des donnees",
+												"webhooks",
+												"audit trail",
+												"optimisation requetes"
 										)
 								),
 								new SpaceBlueprint(
-										"Qualite et Release",
-										"#8338EC",
+										"IA",
+										"#8E4DFF",
 										true,
 										List.of(
-												"strategie de tests",
-												"automatisation regression",
-												"plan de release",
-												"journal des incidents",
-												"post mortem",
-												"quality gate CI"
+												"classification des tickets",
+												"resume de conversation",
+												"recommandations de priorite",
+												"suggestions de sprint",
+												"routage automatique",
+												"analyse sentiment"
+										)
+								),
+								new SpaceBlueprint(
+										"DevOps et QA",
+										"#F4A261",
+										true,
+										List.of(
+												"pipeline ci",
+												"monitoring logs",
+												"sauvegarde base",
+												"alerting",
+												"tests e2e",
+												"optimisation build"
 										)
 								)
 						),
 						List.of(
-								new SprintBlueprint("Sprint build principal", -10, 14,
-										"Livrer les priorites produit sans dette critique", true),
-								new SprintBlueprint("Sprint fiabilisation", 5, 14,
-										"Renforcer la robustesse avant la release", false),
-								new SprintBlueprint("Sprint croissance", 20, 14,
-										"Preparar le prochain cycle d'adoption", false)
+								new SprintBlueprint("Sprint 01", -7, 14,
+										"Stabiliser le core produit", true),
+								new SprintBlueprint("Sprint 02", 7, 14,
+										"Etendre les integrations", false)
 						)
 				),
 				new WorkspaceBlueprint(
-						"Operations et Support Client",
-						"operations-support-client",
+						"Portail Clients",
+						"portail-clients",
 						List.of(
 								new SpaceBlueprint(
-										"Onboarding Clients",
-										"#5F0F40",
+										"Frontend",
+										"#3A86FF",
 										false,
 										List.of(
-												"kickoff client",
-												"parametrage initial",
-												"formation equipes",
-												"validation des acces",
-												"go live accompagne",
-												"checkpoint J+7"
+												"onboarding client",
+												"catalogue offres",
+												"espace support",
+												"messagerie",
+												"tableau de bord client",
+												"parametres compte"
 										)
 								),
 								new SpaceBlueprint(
-										"Support N1-N2",
-										"#9A031E",
+										"Backend",
+										"#4D908E",
 										false,
 										List.of(
-												"triage des tickets",
-												"escalade N2",
-												"SLA hebdomadaire",
-												"knowledge base",
-												"runbook incidents",
-												"suivi de satisfaction"
+												"gestion contrats",
+												"facturation",
+												"api support",
+												"gestion tickets",
+												"journal activite",
+												"export pdf"
 										)
 								),
 								new SpaceBlueprint(
-										"Data et Reporting",
-										"#0F4C5C",
-										false,
-										List.of(
-												"consolidation des KPI",
-												"tableau executif",
-												"qualite des donnees",
-												"alerting operationnel",
-												"cohorte churn",
-												"rapport mensuel"
-										)
-								),
-								new SpaceBlueprint(
-										"Amelioration Continue",
-										"#E36414",
+										"IA",
+										"#8E4DFF",
 										true,
 										List.of(
-												"retour d'experience",
-												"actions correctives",
-												"standardisation process",
-												"automatisation repetitive",
-												"formation interne",
-												"audit trimestriel"
+												"assistant onboarding",
+												"reponse auto support",
+												"classification demandes",
+												"resume tickets",
+												"detection churn",
+												"propositions upsell"
+										)
+								),
+								new SpaceBlueprint(
+										"DevOps et QA",
+										"#F4A261",
+										true,
+										List.of(
+												"monitoring temps reponse",
+												"tests e2e portail",
+												"securite oauth",
+												"backup portail",
+												"scan vulnerabilites",
+												"optimisation cache"
 										)
 								)
 						),
 						List.of(
-								new SprintBlueprint("Sprint stabilisation operationnelle", -12, 14,
-										"Faire baisser le volume d'incidents et clarifier les parcours", true),
-								new SprintBlueprint("Sprint acceleration support", 3, 14,
-										"Ameliorer les temps de resolution et la satisfaction", false),
-								new SprintBlueprint("Sprint excellence service", 18, 14,
-										"Industrialiser la boucle d'amelioration", false)
+								new SprintBlueprint("Sprint 01", -6, 14,
+										"Ameliorer l'onboarding et le support", true),
+								new SprintBlueprint("Sprint 02", 8, 14,
+										"Renforcer la facturation et les API", false)
+						)
+				),
+				new WorkspaceBlueprint(
+						"Analytics Suite",
+						"analytics-suite",
+						List.of(
+								new SpaceBlueprint(
+										"Frontend",
+										"#3A86FF",
+										false,
+										List.of(
+												"dashboard kpi",
+												"filtres dynamiques",
+												"export csv",
+												"bibliotheque charts",
+												"mode presentation",
+												"gestion favoris"
+										)
+								),
+								new SpaceBlueprint(
+										"Backend",
+										"#4D908E",
+										false,
+										List.of(
+												"pipeline ingestion",
+												"modele metrique",
+												"api analytics",
+												"optimisation requetes sql",
+												"gestion droits",
+												"cache agregats"
+										)
+								),
+								new SpaceBlueprint(
+										"IA",
+										"#8E4DFF",
+										true,
+										List.of(
+												"detection anomalies",
+												"forecasting",
+												"segments auto",
+												"explanations",
+												"recommendation alertes",
+												"nlu requetes"
+										)
+								),
+								new SpaceBlueprint(
+										"DevOps et QA",
+										"#F4A261",
+										true,
+										List.of(
+												"tests perf",
+												"monitoring jobs",
+												"data quality checks",
+												"strategie backup",
+												"observabilite",
+												"cost optimization"
+										)
+								)
+						),
+						List.of(
+								new SprintBlueprint("Sprint 01", -5, 14,
+										"Livrer les dashboards critiques", true),
+								new SprintBlueprint("Sprint 02", 9, 14,
+										"Fiabiliser l'ingestion et la data", false)
 						)
 				)
 		);
