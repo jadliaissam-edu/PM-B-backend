@@ -34,7 +34,11 @@ build/
 
 # src/main/resources/application.properties
 
-backend/data/*.db
+# Base de données H2 locale
+data/*.db
+
+# Fichiers internes / brouillons
+arb.txt
 
 # Hide application properties file
 **/application.properties
